@@ -28,5 +28,29 @@
   },
   "posts/basic/2023-11-01-03. Titanic.ipynb": {
     "2023-11-01-03. Titanic.html": "7faa8c21"
+  },
+  "posts/image/2021-01-29-01. CNNwithCIFAR10.ipynb": {
+    "2021-01-29-01. CNNwithCIFAR10.html": "a8493916"
+  },
+  "posts/image/2021-01-30-02. CNNwithMNIST.ipynb": {
+    "2021-01-30-02. CNNwithMNIST.html": "4d25abfd"
+  },
+  "posts/image/2021-02-01-03. ImageAugmentation1.ipynb": {
+    "2021-02-01-03. ImageAugmentation1.html": "dbb85e3c"
+  },
+  "posts/image/2021-02-02-04. ImageAugmentation2.ipynb": {
+    "2021-02-02-04. ImageAugmentation2.html": "81a74356"
+  },
+  "posts/image/2021-02-03-05. ImageAugmentation3.ipynb": {
+    "2021-02-03-05. ImageAugmentation3.html": "b35da098"
+  },
+  "posts/image/2021-02-05-06. DeepLearningwithMNIST.ipynb": {
+    "2021-02-05-06. DeepLearningwithMNIST.html": "ff3c0a00"
+  },
+  "posts/image/2021-02-07-07. PretrainedModel.ipynb": {
+    "2021-02-07-07. PretrainedModel.html": "91e17615"
+  },
+  "posts/image/2021-02-08-08. PretrainedModel_and_Tuning.ipynb": {
+    "2021-02-08-08. PretrainedModel_and_Tuning.html": "aef1e434"
   }
 }

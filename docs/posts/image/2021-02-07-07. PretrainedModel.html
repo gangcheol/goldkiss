@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="CIC">
+<meta name="dcterms.date" content="2021-02-07">
+
+<title>Goldkiss - 06. pretrained Model (1)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../posts/image/2021-02-08-08. PretrainedModel_and_Tuning.html" rel="next">
+<link href="../../posts/image/2021-02-05-06. DeepLearningwithMNIST.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Posts</li><li class="breadcrumb-item"><a href="../../posts/image/2021-01-29-01. CNNwithCIFAR10.html">Image</a></li><li class="breadcrumb-item"><a href="../../posts/image/2021-02-07-07. PretrainedModel.html">06. pretrained Model (1)</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">06. pretrained Model (1)</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>CIC </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 7, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Goldkiss</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Posts</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Advanced</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-08-04. MNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04. MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-21-00. Associate review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00. Associate Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-22-01. 텍스트 분류.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01. 텍스트 분류</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-22-02.이미지_분류.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02. 이미지 분류</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text">Basic</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-10-30-00. Churn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00. Churn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-10-31-01. VOC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01. VOC</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-11-01-02. iris.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02. iris</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-11-01-03. Titanic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03. Titanic</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Image</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-01-29-01. CNNwithCIFAR10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00. CIFAR10</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-01-30-02. CNNwithMNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01. MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-01-03. ImageAugmentation1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02. image DA (1)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-02-04. ImageAugmentation2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03. image DA (2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-03-05. ImageAugmentation3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04. image DA (3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-05-06. DeepLearningwithMNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05. MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-07-07. PretrainedModel.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">06. pretrained Model (1)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-08-08. PretrainedModel_and_Tuning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">07. pretrained Model (2)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pretrained-cnn-사용" id="toc-pretrained-cnn-사용" class="nav-link active" data-scroll-target="#pretrained-cnn-사용">Pretrained CNN 사용</a>
+  <ul class="collapse">
+  <li><a href="#library-loading" id="toc-library-loading" class="nav-link" data-scroll-target="#library-loading">Library Loading</a></li>
+  <li><a href="#load-pretrained-model" id="toc-load-pretrained-model" class="nav-link" data-scroll-target="#load-pretrained-model">Load <strong>Pretrained</strong> Model</a></li>
+  </ul></li>
+  <li><a href="#이미지-파일을-업로드-해둔-곳으로-가자" id="toc-이미지-파일을-업로드-해둔-곳으로-가자" class="nav-link" data-scroll-target="#이미지-파일을-업로드-해둔-곳으로-가자">이미지 파일을 업로드 해둔 곳으로 가자!</a>
+  <ul class="collapse">
+  <li><a href="#구글-드라이브에-수집한-이미지를-업로드" id="toc-구글-드라이브에-수집한-이미지를-업로드" class="nav-link" data-scroll-target="#구글-드라이브에-수집한-이미지를-업로드"><strong>구글 드라이브에 수집한 이미지를 업로드!</strong></a></li>
+  <li><a href="#순서" id="toc-순서" class="nav-link" data-scroll-target="#순서"><strong>순서</strong></a></li>
+  <li><a href="#connect-colaboratory-with-my-google-drive" id="toc-connect-colaboratory-with-my-google-drive" class="nav-link" data-scroll-target="#connect-colaboratory-with-my-google-drive">Connect Colaboratory with my Google Drive</a></li>
+  <li><a href="#load-image" id="toc-load-image" class="nav-link" data-scroll-target="#load-image">Load Image</a></li>
+  <li><a href="#load-images" id="toc-load-images" class="nav-link" data-scroll-target="#load-images">Load Images</a>
+  <ul class="collapse">
+  <li><a href="#임의의-이미지에-대한-모델-적용" id="toc-임의의-이미지에-대한-모델-적용" class="nav-link" data-scroll-target="#임의의-이미지에-대한-모델-적용">임의의 이미지에 대한 모델 적용</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="pretrained-cnn-사용" class="level1">
+<h1>Pretrained CNN 사용</h1>
+<ul>
+<li><a href="https://www.tensorflow.org/api_docs/python/tf/keras/applications">사전훈련 모델 정보</a></li>
+</ul>
+<section id="library-loading" class="level2">
+<h2 class="anchored" data-anchor-id="library-loading">Library Loading</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> tensorflow.keras.applications.vgg16 <span class="im">import</span> VGG16, preprocess_input, decode_predictions</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="load-pretrained-model" class="level2">
+<h2 class="anchored" data-anchor-id="load-pretrained-model">Load <strong>Pretrained</strong> Model</h2>
+<ul>
+<li><strong>“잘 만들어진”</strong> 모델 바로 가져오기!</li>
+</ul>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:30965,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695011908377,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="0274e375-5363-45fe-be19-e18676cdc405">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>model <span class="op">=</span> VGG16(include_top<span class="op">=</span><span class="va">True</span>,       <span class="co"># VGG16 모델의 아웃풋 레이어까지 전부 불러오기</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>              weights<span class="op">=</span><span class="st">'imagenet'</span>,     <span class="co"># ImageNet 데이터를 기반으로 학습된 가중치 불러오기</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>              input_shape<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>,<span class="dv">3</span>) <span class="co"># 모델에 들어가는 데이터의 형태</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>              )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading data from https://storage.googleapis.com/tensorflow/keras-applications/vgg16/vgg16_weights_tf_dim_ordering_tf_kernels.h5
+553467096/553467096 [==============================] - 25s 0us/step</code></pre>
+</div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:477,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695011918797,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="c484f838-7aff-4407-d7df-dcd04fae8343">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>model.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "vgg16"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 224, 224, 3)]     0         
+                                                                 
+ block1_conv1 (Conv2D)       (None, 224, 224, 64)      1792      
+                                                                 
+ block1_conv2 (Conv2D)       (None, 224, 224, 64)      36928     
+                                                                 
+ block1_pool (MaxPooling2D)  (None, 112, 112, 64)      0         
+                                                                 
+ block2_conv1 (Conv2D)       (None, 112, 112, 128)     73856     
+                                                                 
+ block2_conv2 (Conv2D)       (None, 112, 112, 128)     147584    
+                                                                 
+ block2_pool (MaxPooling2D)  (None, 56, 56, 128)       0         
+                                                                 
+ block3_conv1 (Conv2D)       (None, 56, 56, 256)       295168    
+                                                                 
+ block3_conv2 (Conv2D)       (None, 56, 56, 256)       590080    
+                                                                 
+ block3_conv3 (Conv2D)       (None, 56, 56, 256)       590080    
+                                                                 
+ block3_pool (MaxPooling2D)  (None, 28, 28, 256)       0         
+                                                                 
+ block4_conv1 (Conv2D)       (None, 28, 28, 512)       1180160   
+                                                                 
+ block4_conv2 (Conv2D)       (None, 28, 28, 512)       2359808   
+                                                                 
+ block4_conv3 (Conv2D)       (None, 28, 28, 512)       2359808   
+                                                                 
+ block4_pool (MaxPooling2D)  (None, 14, 14, 512)       0         
+                                                                 
+ block5_conv1 (Conv2D)       (None, 14, 14, 512)       2359808   
+                                                                 
+ block5_conv2 (Conv2D)       (None, 14, 14, 512)       2359808   
+                                                                 
+ block5_conv3 (Conv2D)       (None, 14, 14, 512)       2359808   
+                                                                 
+ block5_pool (MaxPooling2D)  (None, 7, 7, 512)         0         
+                                                                 
+ flatten (Flatten)           (None, 25088)             0         
+                                                                 
+ fc1 (Dense)                 (None, 4096)              102764544 
+                                                                 
+ fc2 (Dense)                 (None, 4096)              16781312  
+                                                                 
+ predictions (Dense)         (None, 1000)              4097000   
+                                                                 
+=================================================================
+Total params: 138357544 (527.79 MB)
+Trainable params: 138357544 (527.79 MB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> tensorflow.keras.utils <span class="im">import</span> plot_model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:1482,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012003048,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="446f473a-3ced-479e-9263-648ce5fbf3fd">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>plot_model(model, show_shapes<span class="op">=</span><span class="va">True</span>, show_layer_names<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<ul>
+<li><p>아웃풋 레이어를 보면 노드가 1000개!</p></li>
+<li><p>분류 가능한 이미지가 1000개라는 뜻!</p></li>
+<li><p><a href="http://image-net.org/challenges/LSVRC/2014/browse-synsets"><strong>구경하러 가자</strong></a></p></li>
+</ul>
+</section>
+</section>
+<section id="이미지-파일을-업로드-해둔-곳으로-가자" class="level1">
+<h1>이미지 파일을 업로드 해둔 곳으로 가자!</h1>
+<hr>
+<section id="구글-드라이브에-수집한-이미지를-업로드" class="level3">
+<h3 class="anchored" data-anchor-id="구글-드라이브에-수집한-이미지를-업로드"><strong>구글 드라이브에 수집한 이미지를 업로드!</strong></h3>
+</section>
+<section id="순서" class="level3">
+<h3 class="anchored" data-anchor-id="순서"><strong>순서</strong></h3>
+<ol type="1">
+<li>구글링하여 이미지를 수집합니다.</li>
+<li><strong>본인의</strong> 구글 드라이브에 my_data 폴더를 생성합니다.</li>
+<li>my_data 폴더 안에 img1 폴더를 생성합니다.</li>
+<li>1번 단계에서 수집한 이미지를 img1 폴더에 업로드 합니다.</li>
+<li>30초 정도 기다립시다.</li>
+<li>아래의 코드들을 실행합니다.</li>
+</ol>
+</section>
+<section id="connect-colaboratory-with-my-google-drive" class="level2">
+<h2 class="anchored" data-anchor-id="connect-colaboratory-with-my-google-drive">Connect Colaboratory with my Google Drive</h2>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:22892,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012356003,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="202889af-83ea-461d-e42e-8ad5dba752d8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">from</span> google.colab <span class="im">import</span> drive</span>
+<span id="cb8-2"><a href="#cb8-2"></a>drive.mount(<span class="st">'/content/drive'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mounted at /content/drive</code></pre>
+</div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:496,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012360105,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="783fd88f-9221-4468-f7d0-3377ce4be3f0">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">!</span>ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>drive  model.png  sample_data</code></pre>
+</div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:4,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012363651,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="16b0509b-c2fe-49dc-b5d4-f463fc95ecb3">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">!</span>cd <span class="op">/</span>content<span class="op">/</span>drive<span class="op">/</span>MyDrive<span class="op">/</span>my_data<span class="op">;</span> ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>datasets  img1  model.png     my_mnist   MyPjt  transfer
+handmade  img2  my_first_save.h5  my_mnist2  temp</code></pre>
+</div>
+</div>
+</section>
+<section id="load-image" class="level2">
+<h2 class="anchored" data-anchor-id="load-image">Load Image</h2>
+<ul>
+<li>업로드 한 이미지 하나를 불러와 확인해본다</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="im">import</span> glob</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="im">from</span> tensorflow.keras.preprocessing <span class="im">import</span> image</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:3,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012389796,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="a9c4629f-f416-4cc0-e013-c7be13fc8fc5">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>files <span class="op">=</span> glob.glob(<span class="st">'/content/drive/MyDrive/my_data/img1/*'</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a>files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>['/content/drive/MyDrive/my_data/img1/puppy-1903313_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/puppy-2785074_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/dog-4390885_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/dog-2561134_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/dog-1728494_960_720.webp',
+ '/content/drive/MyDrive/my_data/img1/cat-2083492_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/maine-coon-694730_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/cat-2536662_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/tiger-2535888_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/cat-1151519_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/woman-3169726_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/suit-673697_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/happy-1836445_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/art-1851483_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/notebook-581128_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/coffee-2714970_960_720.jpg',
+ '/content/drive/MyDrive/my_data/img1/coffee-1324126_960_720.jpg']</code></pre>
+</div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:11877,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012525493,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="fd6c9ff7-21d7-4527-e296-7778373e76dc">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>img <span class="op">=</span> image.load_img(files[<span class="op">-</span><span class="dv">1</span>], color_mode<span class="op">=</span><span class="st">'rgb'</span>, target_size <span class="op">=</span> (<span class="dv">224</span>,<span class="dv">224</span>) )</span>
+<span id="cb17-2"><a href="#cb17-2"></a>img <span class="op">=</span> image.img_to_array(img)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>img <span class="op">=</span> img.reshape((<span class="op">-</span><span class="dv">1</span>,<span class="dv">224</span>,<span class="dv">224</span>,<span class="dv">3</span>))</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="bu">print</span>(<span class="ss">f'preprocess 전: 최대값=</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(img)<span class="sc">}</span><span class="ss">, 최소값=</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">min</span>(img)<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a>img <span class="op">=</span> preprocess_input(img)</span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="bu">print</span>(<span class="ss">f'preprocess 후: 최대값=</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">max</span>(img)<span class="sc">}</span><span class="ss">, 최소값=</span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">min</span>(img)<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb17-8"><a href="#cb17-8"></a></span>
+<span id="cb17-9"><a href="#cb17-9"></a>features <span class="op">=</span> model.predict(img)</span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="bu">print</span>(decode_predictions(features, top<span class="op">=</span><span class="dv">3</span>))</span>
+<span id="cb17-11"><a href="#cb17-11"></a></span>
+<span id="cb17-12"><a href="#cb17-12"></a>plt.imshow(image.load_img(files[<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb17-13"><a href="#cb17-13"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>preprocess 전: 최대값=255.0, 최소값=0.0
+preprocess 후: 최대값=151.06100463867188, 최소값=-123.68000030517578
+1/1 [==============================] - 8s 8s/step
+Downloading data from https://storage.googleapis.com/download.tensorflow.org/data/imagenet_class_index.json
+35363/35363 [==============================] - 0s 0us/step
+[[('n04332243', 'strainer', 0.2240853), ('n03000134', 'chainlink_fence', 0.10095732), ('n02999410', 'chain', 0.024076866)]]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="load-images" class="level2">
+<h2 class="anchored" data-anchor-id="load-images">Load Images</h2>
+<ul>
+<li>업로드 한 이미지 전체를 확인해본다</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>images <span class="op">=</span> []</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="cf">for</span> path <span class="kw">in</span> files :</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    img <span class="op">=</span> image.load_img(path, grayscale<span class="op">=</span><span class="va">False</span>, target_size<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>) )</span>
+<span id="cb19-5"><a href="#cb19-5"></a>    img <span class="op">=</span> image.img_to_array(img)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>    img <span class="op">=</span> preprocess_input(img)</span>
+<span id="cb19-7"><a href="#cb19-7"></a>    images.append(img)</span>
+<span id="cb19-8"><a href="#cb19-8"></a></span>
+<span id="cb19-9"><a href="#cb19-9"></a>images <span class="op">=</span> np.array(images)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:30675,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695012675541,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="7eb40718-94fc-42d7-a39c-3c86203ea98b">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>features <span class="op">=</span> model.predict(images)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>predictions <span class="op">=</span> decode_predictions(features, top<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(images.shape[<span class="dv">0</span>]) :</span>
+<span id="cb20-5"><a href="#cb20-5"></a>    <span class="bu">print</span>(predictions[i])</span>
+<span id="cb20-6"><a href="#cb20-6"></a>    plt.imshow(image.load_img(files[i]))</span>
+<span id="cb20-7"><a href="#cb20-7"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Output hidden; open in https://colab.research.google.com to view.</code></pre>
+</div>
+</div>
+<section id="임의의-이미지에-대한-모델-적용" class="level3">
+<h3 class="anchored" data-anchor-id="임의의-이미지에-대한-모델-적용">임의의 이미지에 대한 모델 적용</h3>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:486,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695014160217,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">import</span> glob</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:3,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695014162251,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="3d2297df-1990-49e0-ba1d-1ea5bddde41d">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>files <span class="op">=</span> glob.glob(<span class="st">'/content/drive/MyDrive/my_data/img2/*'</span>)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>files</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>['/content/drive/MyDrive/my_data/img2/puppies1.JPG',
+ '/content/drive/MyDrive/my_data/img2/puppies2.jpg',
+ '/content/drive/MyDrive/my_data/img2/puppies3.jfif',
+ '/content/drive/MyDrive/my_data/img2/puppies4.webp',
+ '/content/drive/MyDrive/my_data/img2/puppies5.jpg']</code></pre>
+</div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:4014,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695014172518,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>images <span class="op">=</span> []</span>
+<span id="cb25-2"><a href="#cb25-2"></a></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="cf">for</span> path <span class="kw">in</span> files :</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    img <span class="op">=</span> image.load_img(path, grayscale<span class="op">=</span><span class="va">False</span>, target_size<span class="op">=</span>(<span class="dv">224</span>,<span class="dv">224</span>) )</span>
+<span id="cb25-5"><a href="#cb25-5"></a>    img <span class="op">=</span> image.img_to_array(img)</span>
+<span id="cb25-6"><a href="#cb25-6"></a>    img <span class="op">=</span> preprocess_input(img)</span>
+<span id="cb25-7"><a href="#cb25-7"></a>    images.append(img)</span>
+<span id="cb25-8"><a href="#cb25-8"></a></span>
+<span id="cb25-9"><a href="#cb25-9"></a>images <span class="op">=</span> np.array(images)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-executioninfo="{&quot;elapsed&quot;:9599,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1695014182116,&quot;user&quot;:{&quot;displayName&quot;:&quot;김건영&quot;,&quot;userId&quot;:&quot;04338252548733078915&quot;},&quot;user_tz&quot;:-540}" data-outputid="1d8a9e8a-00e1-4078-a459-41a384c88746">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>features <span class="op">=</span> model.predict(images)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>predictions <span class="op">=</span> decode_predictions(features, top<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb26-3"><a href="#cb26-3"></a></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(images.shape[<span class="dv">0</span>]) :</span>
+<span id="cb26-5"><a href="#cb26-5"></a>    <span class="bu">print</span>(predictions[i])</span>
+<span id="cb26-6"><a href="#cb26-6"></a>    plt.imshow(image.load_img(files[i]))</span>
+<span id="cb26-7"><a href="#cb26-7"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1/1 [==============================] - 1s 1s/step
+[('n02090622', 'borzoi', 0.31328258), ('n02110341', 'dalmatian', 0.26708207), ('n02091134', 'whippet', 0.2337371)]
+[('n02091635', 'otterhound', 0.94553703), ('n02096051', 'Airedale', 0.0132075725), ('n02088466', 'bloodhound', 0.010801472)]
+[('n02113023', 'Pembroke', 0.8097092), ('n02085620', 'Chihuahua', 0.07340224), ('n02113186', 'Cardigan', 0.041669823)]
+[('n02091831', 'Saluki', 0.47179848), ('n02099712', 'Labrador_retriever', 0.18313958), ('n02099601', 'golden_retriever', 0.06457339)]
+[('n02100583', 'vizsla', 0.5242368), ('n02099601', 'golden_retriever', 0.12659168), ('n02102318', 'cocker_spaniel', 0.031939697)]</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-18-output-3.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-18-output-4.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-18-output-5.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-02-07-07. PretrainedModel_files/figure-html/cell-18-output-6.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../posts/image/2021-02-05-06. DeepLearningwithMNIST.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">05. MNIST</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../posts/image/2021-02-08-08. PretrainedModel_and_Tuning.html" class="pagination-link">
+        <span class="nav-page-text">07. pretrained Model (2)</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

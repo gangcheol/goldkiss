@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="CIC">
+<meta name="dcterms.date" content="2021-01-29">
+
+<title>Goldkiss - 00. CIFAR10</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../posts/image/2021-01-30-02. CNNwithMNIST.html" rel="next">
+<link href="../../posts/basic/2023-11-01-03. Titanic.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Posts</li><li class="breadcrumb-item"><a href="../../posts/image/2021-01-29-01. CNNwithCIFAR10.html">Image</a></li><li class="breadcrumb-item"><a href="../../posts/image/2021-01-29-01. CNNwithCIFAR10.html">00. CIFAR10</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">00. CIFAR10</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>CIC </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">January 29, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Goldkiss</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Posts</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+ <span class="menu-text">Advanced</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-08-04. MNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04. MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-21-00. Associate review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00. Associate Review</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-22-01. 텍스트 분류.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01. 텍스트 분류</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-22-02.이미지_분류.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02. 이미지 분류</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+ <span class="menu-text">Basic</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-10-30-00. Churn.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00. Churn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-10-31-01. VOC.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01. VOC</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-11-01-02. iris.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02. iris</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/basic/2023-11-01-03. Titanic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03. Titanic</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Image</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-01-29-01. CNNwithCIFAR10.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">00. CIFAR10</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-01-30-02. CNNwithMNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">01. MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-01-03. ImageAugmentation1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">02. image DA (1)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-02-04. ImageAugmentation2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03. image DA (2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-03-05. ImageAugmentation3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04. image DA (3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-05-06. DeepLearningwithMNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">05. MNIST</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-07-07. PretrainedModel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">06. pretrained Model (1)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-08-08. PretrainedModel_and_Tuning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">07. pretrained Model (2)</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#convolutional-neural-network-with-cifar-10" id="toc-convolutional-neural-network-with-cifar-10" class="nav-link active" data-scroll-target="#convolutional-neural-network-with-cifar-10">Convolutional Neural Network with CIFAR-10</a>
+  <ul class="collapse">
+  <li><a href="#data-load" id="toc-data-load" class="nav-link" data-scroll-target="#data-load">Data Load</a></li>
+  <li><a href="#x변수-scaling-standardization" id="toc-x변수-scaling-standardization" class="nav-link" data-scroll-target="#x변수-scaling-standardization">X변수: Scaling (Standardization)</a></li>
+  <li><a href="#y변수-one-hot-encoding" id="toc-y변수-one-hot-encoding" class="nav-link" data-scroll-target="#y변수-one-hot-encoding">Y변수: One-Hot Encoding</a></li>
+  <li><a href="#modeling" id="toc-modeling" class="nav-link" data-scroll-target="#modeling">Modeling</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="convolutional-neural-network-with-cifar-10" class="level1">
+<h1>Convolutional Neural Network with CIFAR-10</h1>
+<div class="cell" data-tags="[]" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Import libraries</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> random <span class="im">as</span> rd</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> accuracy_score</span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-load" class="level3">
+<h3 class="anchored" data-anchor-id="data-load">Data Load</h3>
+<div class="cell" data-outputid="c0259c72-2a48-42fc-82d9-1acdbac73bbc" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>(train_x, train_y), (test_x, test_y) <span class="op">=</span> keras.datasets.cifar10.load_data()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading data from https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
+170498071/170498071 [==============================] - 36s 0us/step</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="b8b22d4c-8cce-456b-dcd3-f3c468be60b6" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">print</span>(train_x.shape, train_y.shape, test_x.shape, test_y.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(50000, 32, 32, 3) (50000, 1) (10000, 32, 32, 3) (10000, 1)</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="21dd6046-b6ea-4ae4-943f-4aea2a8114a1" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>labels <span class="op">=</span> {<span class="dv">0</span> : <span class="st">'Airplane'</span>,</span>
+<span id="cb6-2"><a href="#cb6-2"></a>          <span class="dv">1</span> : <span class="st">'Automobile'</span>,</span>
+<span id="cb6-3"><a href="#cb6-3"></a>          <span class="dv">2</span> : <span class="st">'Bird'</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>          <span class="dv">3</span> : <span class="st">'Cat'</span>,</span>
+<span id="cb6-5"><a href="#cb6-5"></a>          <span class="dv">4</span> : <span class="st">'Deer'</span>,</span>
+<span id="cb6-6"><a href="#cb6-6"></a>          <span class="dv">5</span> : <span class="st">'Dog'</span>,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>          <span class="dv">6</span> : <span class="st">'Frog'</span>,</span>
+<span id="cb6-8"><a href="#cb6-8"></a>          <span class="dv">7</span> : <span class="st">'Horse'</span>,</span>
+<span id="cb6-9"><a href="#cb6-9"></a>          <span class="dv">8</span> : <span class="st">'Ship'</span>,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>          <span class="dv">9</span> : <span class="st">'Truck'</span> }</span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="bu">print</span>(labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{0: 'Airplane', 1: 'Automobile', 2: 'Bird', 3: 'Cat', 4: 'Deer', 5: 'Dog', 6: 'Frog', 7: 'Horse', 8: 'Ship', 9: 'Truck'}</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="283da8fa-32c2-42e9-a7d7-df70ac303c7d" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="bu">id</span> <span class="op">=</span> rd.randrange(<span class="dv">0</span>,<span class="dv">10000</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="bu">print</span>(<span class="ss">f'id = </span><span class="sc">{</span><span class="bu">id</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="bu">print</span>(<span class="ss">f'Image Name: </span><span class="sc">{</span>labels[test_y[<span class="bu">id</span>][<span class="dv">0</span>]]<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>plt.imshow(test_x[<span class="bu">id</span>])</span>
+<span id="cb8-6"><a href="#cb8-6"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>id = 1925
+Image Name: Automobile</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-01-29-01. CNNwithCIFAR10_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="x변수-scaling-standardization" class="level3">
+<h3 class="anchored" data-anchor-id="x변수-scaling-standardization">X변수: Scaling (Standardization)</h3>
+<ul>
+<li>모든 채널에 Standardization 적용</li>
+</ul>
+<div class="cell" data-outputid="b8ad96f7-953d-4ad1-cd0a-e9014392632b" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>mean_n, std_n <span class="op">=</span> train_x.mean(), train_x.std()</span>
+<span id="cb10-2"><a href="#cb10-2"></a>mean_n, std_n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>(120.70756512369792, 64.1500758911213)</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>train_x <span class="op">=</span> (train_x <span class="op">-</span> mean_n) <span class="op">/</span> std_n</span>
+<span id="cb12-2"><a href="#cb12-2"></a>test_x <span class="op">=</span> (test_x <span class="op">-</span> mean_n) <span class="op">/</span> std_n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="8d8f16d5-89f1-4588-ac67-5577aea71ea8" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>train_x.mean(), train_x.std()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>(-2.5247951877342226e-17, 1.0000000000000022)</code></pre>
+</div>
+</div>
+<ul>
+<li>개별 채널에 Standardization 적용</li>
+</ul>
+<div class="cell" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>tr_r_mean, tr_r_std <span class="op">=</span> train_x[:,:,:,<span class="dv">0</span>].mean(), train_x[:,:,:,<span class="dv">0</span>].std()</span>
+<span id="cb15-2"><a href="#cb15-2"></a>tr_g_mean, tr_g_std <span class="op">=</span> train_x[:,:,:,<span class="dv">1</span>].mean(), train_x[:,:,:,<span class="dv">1</span>].std()</span>
+<span id="cb15-3"><a href="#cb15-3"></a>tr_b_mean, tr_b_std <span class="op">=</span> train_x[:,:,:,<span class="dv">2</span>].mean(), train_x[:,:,:,<span class="dv">2</span>].std()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>train_x_r <span class="op">=</span> (train_x[:,:,:,<span class="dv">0</span>] <span class="op">-</span> tr_r_mean) <span class="op">/</span> tr_r_std</span>
+<span id="cb16-2"><a href="#cb16-2"></a>train_x_g <span class="op">=</span> (train_x[:,:,:,<span class="dv">1</span>] <span class="op">-</span> tr_g_mean) <span class="op">/</span> tr_g_std</span>
+<span id="cb16-3"><a href="#cb16-3"></a>train_x_b <span class="op">=</span> (train_x[:,:,:,<span class="dv">2</span>] <span class="op">-</span> tr_b_mean) <span class="op">/</span> tr_b_std</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="4ad79296-47c6-49fd-c13f-2708e02538c9" data-tags="[]" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>train_x_r.shape, train_x_g.shape, train_x_b.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>((50000, 32, 32), (50000, 32, 32), (50000, 32, 32))</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>train_x <span class="op">=</span> np.stack( (train_x_r, train_x_g, train_x_b), axis<span class="op">=</span><span class="dv">3</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>test_x_r <span class="op">=</span> (test_x[:,:,:,<span class="dv">0</span>] <span class="op">-</span> tr_r_mean) <span class="op">/</span> tr_r_std</span>
+<span id="cb20-2"><a href="#cb20-2"></a>test_x_g <span class="op">=</span> (test_x[:,:,:,<span class="dv">1</span>] <span class="op">-</span> tr_g_mean) <span class="op">/</span> tr_g_std</span>
+<span id="cb20-3"><a href="#cb20-3"></a>test_x_b <span class="op">=</span> (test_x[:,:,:,<span class="dv">2</span>] <span class="op">-</span> tr_b_mean) <span class="op">/</span> tr_b_std</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>test_x <span class="op">=</span> np.stack( (test_x_r, test_x_g, test_x_b), axis<span class="op">=</span><span class="dv">3</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="6e738ade-e738-4bd0-85b3-5a4dd6013d5a" data-tags="[]" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a>train_x.shape, test_x.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>((50000, 32, 32, 3), (10000, 32, 32, 3))</code></pre>
+</div>
+</div>
+</section>
+<section id="y변수-one-hot-encoding" class="level3">
+<h3 class="anchored" data-anchor-id="y변수-one-hot-encoding">Y변수: One-Hot Encoding</h3>
+<div class="cell" data-outputid="59a74d2d-e66f-4005-e182-c8e51a608a9c" data-tags="[]" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a>train_y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>(50000, 1)</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a>train_y <span class="op">=</span> np.ravel(train_y)</span>
+<span id="cb26-2"><a href="#cb26-2"></a>test_y <span class="op">=</span> np.ravel(test_y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="076ef5e8-96a8-42d6-80bd-04efaef889cc" data-tags="[]" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a>train_y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>(50000,)</code></pre>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a>class_n <span class="op">=</span> <span class="bu">len</span>(np.unique(train_y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="im">from</span> tensorflow.keras.utils <span class="im">import</span> to_categorical</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>train_y <span class="op">=</span> to_categorical(train_y, class_n)</span>
+<span id="cb31-2"><a href="#cb31-2"></a>test_y <span class="op">=</span> to_categorical(test_y, class_n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="3f977fc2-82ea-48c7-970e-3221b706f68f" data-tags="[]" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a>train_x.shape, train_y.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>((50000, 32, 32, 3), (50000, 10))</code></pre>
+</div>
+</div>
+</section>
+<section id="modeling" class="level3">
+<h3 class="anchored" data-anchor-id="modeling">Modeling</h3>
+<ul>
+<li><p>EarlyStopping 의 옵션 조절</p></li>
+<li><p>.fit( )</p></li>
+<li><p>.predict( )</p></li>
+<li><p><strong>모델 구조</strong></p>
+<ol start="0" type="1">
+<li>Functional, Sequential 중 택일</li>
+<li>인풋레이어</li>
+<li>Convolution : 필터수 32개, 사이즈(3, 3), same padding</li>
+<li>Convolution : 필터수 32개, 사이즈(3, 3), same padding</li>
+<li>BatchNormalization</li>
+<li>MaxPooling : 사이즈(2,2) 스트라이드(2,2)</li>
+<li>DropOut : 25% 비활성화</li>
+<li>Convolution : 필터수 64개, 사이즈(3, 3), same padding</li>
+<li>Convolution : 필터수 64개, 사이즈(3, 3), same padding</li>
+<li>BatchNormalization</li>
+<li>MaxPooling : 사이즈(2,2) 스트라이드(2,2)</li>
+<li>DropOut : 25% 비활성화</li>
+<li>Flatten( )</li>
+<li>Fully Connected Layer : 노드 1024개</li>
+<li>BatchNormalization</li>
+<li>DropOut : 35% 비활성화</li>
+<li>아웃풋레이어</li>
+</ol></li>
+</ul>
+<div class="cell" data-tags="[]" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="im">from</span> tensorflow <span class="im">import</span> keras</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a><span class="co">## Sequential API</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="co"># 1. 세션 클리어 : 메모리에 남아있는 모델 구조를 지워줘!</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a>keras.backend.clear_session()</span>
+<span id="cb35-4"><a href="#cb35-4"></a></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="co"># 2. 모델 발판 생성 : 레이어 블록을 조립할 발판!</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a>model1 <span class="op">=</span> keras.models.Sequential()</span>
+<span id="cb35-7"><a href="#cb35-7"></a></span>
+<span id="cb35-8"><a href="#cb35-8"></a><span class="co"># 3. 레이어 블록 조립 : .add( )</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="co"># 인풋레이어</span></span>
+<span id="cb35-10"><a href="#cb35-10"></a>model1.add( keras.layers.Input(shape<span class="op">=</span>(<span class="dv">32</span>,<span class="dv">32</span>,<span class="dv">3</span>)) )</span>
+<span id="cb35-11"><a href="#cb35-11"></a></span>
+<span id="cb35-12"><a href="#cb35-12"></a><span class="co"># Convolution : 필터수 32개, 사이즈(3, 3), same padding</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a>model1.add( keras.layers.Conv2D(filters<span class="op">=</span><span class="dv">32</span>,          <span class="co"># 새롭게 제작하려는 feature map의 수! or 서로 다른 filters 수!</span></span>
+<span id="cb35-14"><a href="#cb35-14"></a>                                kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),   <span class="co"># Conv2D 필터의 가로세로 사이즈 # depth는 자동 보정!</span></span>
+<span id="cb35-15"><a href="#cb35-15"></a>                                strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),       <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb35-16"><a href="#cb35-16"></a>                                padding<span class="op">=</span><span class="st">'same'</span>,      <span class="co"># 1. 이전 feature map 사이즈 유지 | 2. 외곽 정보를 더 반영!</span></span>
+<span id="cb35-17"><a href="#cb35-17"></a>                                activation<span class="op">=</span><span class="st">'relu'</span>,   <span class="co"># 주의!</span></span>
+<span id="cb35-18"><a href="#cb35-18"></a>                                ) )</span>
+<span id="cb35-19"><a href="#cb35-19"></a><span class="co"># Convolution : 필터수 32개, 사이즈(3, 3), same padding</span></span>
+<span id="cb35-20"><a href="#cb35-20"></a>model1.add( keras.layers.Conv2D(filters<span class="op">=</span><span class="dv">32</span>,          <span class="co"># 새롭게 제작하려는 feature map의 수! or 서로 다른 filters 수!</span></span>
+<span id="cb35-21"><a href="#cb35-21"></a>                                kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),   <span class="co"># Conv2D 필터의 가로세로 사이즈 # depth는 자동 보정!</span></span>
+<span id="cb35-22"><a href="#cb35-22"></a>                                strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),       <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb35-23"><a href="#cb35-23"></a>                                padding<span class="op">=</span><span class="st">'same'</span>,      <span class="co"># 1. 이전 feature map 사이즈 유지 | 2. 외곽 정보를 더 반영!</span></span>
+<span id="cb35-24"><a href="#cb35-24"></a>                                activation<span class="op">=</span><span class="st">'relu'</span>,   <span class="co"># 주의!</span></span>
+<span id="cb35-25"><a href="#cb35-25"></a>                                ) )</span>
+<span id="cb35-26"><a href="#cb35-26"></a><span class="co"># BatchNormalization</span></span>
+<span id="cb35-27"><a href="#cb35-27"></a>model1.add( keras.layers.BatchNormalization() )</span>
+<span id="cb35-28"><a href="#cb35-28"></a><span class="co"># MaxPooling : 사이즈(2,2) 스트라이드(2,2)</span></span>
+<span id="cb35-29"><a href="#cb35-29"></a>model1.add( keras.layers.MaxPool2D(pool_size<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>),  <span class="co"># Maxpool2D 필터의 가로세로 사이즈</span></span>
+<span id="cb35-30"><a href="#cb35-30"></a>                                   strides<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>)     <span class="co"># Maxpool2D 필터의 이동 보폭! # default는 필터 사이즈를 따름!</span></span>
+<span id="cb35-31"><a href="#cb35-31"></a>                                   ) )</span>
+<span id="cb35-32"><a href="#cb35-32"></a><span class="co"># DropOut : 25% 비활성화</span></span>
+<span id="cb35-33"><a href="#cb35-33"></a>model1.add( keras.layers.Dropout(<span class="fl">0.25</span>) )</span>
+<span id="cb35-34"><a href="#cb35-34"></a></span>
+<span id="cb35-35"><a href="#cb35-35"></a><span class="co"># Convolution : 필터수 64개, 사이즈(3, 3), same padding</span></span>
+<span id="cb35-36"><a href="#cb35-36"></a>model1.add( keras.layers.Conv2D(filters<span class="op">=</span><span class="dv">64</span>,          <span class="co"># 새롭게 제작하려는 feature map의 수! or 서로 다른 filters 수!</span></span>
+<span id="cb35-37"><a href="#cb35-37"></a>                                kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),   <span class="co"># Conv2D 필터의 가로세로 사이즈 # depth는 자동 보정!</span></span>
+<span id="cb35-38"><a href="#cb35-38"></a>                                strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),       <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb35-39"><a href="#cb35-39"></a>                                padding<span class="op">=</span><span class="st">'same'</span>,      <span class="co"># 1. 이전 feature map 사이즈 유지 | 2. 외곽 정보를 더 반영!</span></span>
+<span id="cb35-40"><a href="#cb35-40"></a>                                activation<span class="op">=</span><span class="st">'relu'</span>,   <span class="co"># 주의!</span></span>
+<span id="cb35-41"><a href="#cb35-41"></a>                                ) )</span>
+<span id="cb35-42"><a href="#cb35-42"></a><span class="co"># Convolution : 필터수 64개, 사이즈(3, 3), same padding</span></span>
+<span id="cb35-43"><a href="#cb35-43"></a>model1.add( keras.layers.Conv2D(filters<span class="op">=</span><span class="dv">64</span>,          <span class="co"># 새롭게 제작하려는 feature map의 수! or 서로 다른 filters 수!</span></span>
+<span id="cb35-44"><a href="#cb35-44"></a>                                kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),   <span class="co"># Conv2D 필터의 가로세로 사이즈 # depth는 자동 보정!</span></span>
+<span id="cb35-45"><a href="#cb35-45"></a>                                strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),       <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb35-46"><a href="#cb35-46"></a>                                padding<span class="op">=</span><span class="st">'same'</span>,      <span class="co"># 1. 이전 feature map 사이즈 유지 | 2. 외곽 정보를 더 반영!</span></span>
+<span id="cb35-47"><a href="#cb35-47"></a>                                activation<span class="op">=</span><span class="st">'relu'</span>,   <span class="co"># 주의!</span></span>
+<span id="cb35-48"><a href="#cb35-48"></a>                                ) )</span>
+<span id="cb35-49"><a href="#cb35-49"></a><span class="co"># BatchNormalization</span></span>
+<span id="cb35-50"><a href="#cb35-50"></a>model1.add( keras.layers.BatchNormalization() )</span>
+<span id="cb35-51"><a href="#cb35-51"></a><span class="co"># MaxPooling : 사이즈(2,2) 스트라이드(2,2)</span></span>
+<span id="cb35-52"><a href="#cb35-52"></a>model1.add( keras.layers.MaxPool2D(pool_size<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>),  <span class="co"># Maxpool2D 필터의 가로세로 사이즈</span></span>
+<span id="cb35-53"><a href="#cb35-53"></a>                                   strides<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>)     <span class="co"># Maxpool2D 필터의 이동 보폭! # default는 필터 사이즈를 따름!</span></span>
+<span id="cb35-54"><a href="#cb35-54"></a>                                   ) )</span>
+<span id="cb35-55"><a href="#cb35-55"></a><span class="co"># DropOut : 25% 비활성화</span></span>
+<span id="cb35-56"><a href="#cb35-56"></a>model1.add( keras.layers.Dropout(<span class="fl">0.25</span>) )</span>
+<span id="cb35-57"><a href="#cb35-57"></a></span>
+<span id="cb35-58"><a href="#cb35-58"></a><span class="co"># Flatten( )</span></span>
+<span id="cb35-59"><a href="#cb35-59"></a>model1.add( keras.layers.Flatten() )</span>
+<span id="cb35-60"><a href="#cb35-60"></a><span class="co"># Fully Connected Layer : 노드 1024개</span></span>
+<span id="cb35-61"><a href="#cb35-61"></a>model1.add( keras.layers.Dense(<span class="dv">1024</span>, activation<span class="op">=</span><span class="st">'relu'</span>) )</span>
+<span id="cb35-62"><a href="#cb35-62"></a><span class="co"># BatchNormalization</span></span>
+<span id="cb35-63"><a href="#cb35-63"></a>model1.add( keras.layers.BatchNormalization() )</span>
+<span id="cb35-64"><a href="#cb35-64"></a><span class="co"># DropOut : 35% 비활성화</span></span>
+<span id="cb35-65"><a href="#cb35-65"></a>model1.add( keras.layers.Dropout(<span class="fl">0.35</span>) )</span>
+<span id="cb35-66"><a href="#cb35-66"></a><span class="co"># 아웃풋레이어</span></span>
+<span id="cb35-67"><a href="#cb35-67"></a>model1.add( keras.layers.Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>) )</span>
+<span id="cb35-68"><a href="#cb35-68"></a></span>
+<span id="cb35-69"><a href="#cb35-69"></a><span class="co"># 4. 컴파일</span></span>
+<span id="cb35-70"><a href="#cb35-70"></a>model1.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'adam'</span>,</span>
+<span id="cb35-71"><a href="#cb35-71"></a>               loss<span class="op">=</span>keras.losses.categorical_crossentropy,</span>
+<span id="cb35-72"><a href="#cb35-72"></a>               metrics<span class="op">=</span>[<span class="st">'accuracy'</span>]</span>
+<span id="cb35-73"><a href="#cb35-73"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="b799ead1-6857-4dcc-a53d-2bf64d91628b">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>model1.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ conv2d (Conv2D)             (None, 32, 32, 32)        896       
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 32, 32)        9248      
+                                                                 
+ batch_normalization (Batch  (None, 32, 32, 32)        128       
+ Normalization)                                                  
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 16, 16, 32)        0         
+ D)                                                              
+                                                                 
+ dropout (Dropout)           (None, 16, 16, 32)        0         
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 16, 64)        18496     
+                                                                 
+ conv2d_3 (Conv2D)           (None, 16, 16, 64)        36928     
+                                                                 
+ batch_normalization_1 (Bat  (None, 16, 16, 64)        256       
+ chNormalization)                                                
+                                                                 
+ max_pooling2d_1 (MaxPoolin  (None, 8, 8, 64)          0         
+ g2D)                                                            
+                                                                 
+ dropout_1 (Dropout)         (None, 8, 8, 64)          0         
+                                                                 
+ flatten (Flatten)           (None, 4096)              0         
+                                                                 
+ dense (Dense)               (None, 1024)              4195328   
+                                                                 
+ batch_normalization_2 (Bat  (None, 1024)              4096      
+ chNormalization)                                                
+                                                                 
+ dropout_2 (Dropout)         (None, 1024)              0         
+                                                                 
+ dense_1 (Dense)             (None, 10)                10250     
+                                                                 
+=================================================================
+Total params: 4275626 (16.31 MB)
+Trainable params: 4273386 (16.30 MB)
+Non-trainable params: 2240 (8.75 KB)
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="im">from</span> tensorflow.keras.backend <span class="im">import</span> clear_session</span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="im">from</span> tensorflow.keras.models <span class="im">import</span> Model</span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> Input, Dense, Flatten, BatchNormalization, Dropout</span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="im">from</span> tensorflow.keras.layers <span class="im">import</span> Conv2D, MaxPool2D</span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="im">from</span> tensorflow.keras.losses <span class="im">import</span> categorical_crossentropy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="co">## Functional API</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="co"># 1. 세션 클리어 : 청소</span></span>
+<span id="cb39-3"><a href="#cb39-3"></a>clear_session()</span>
+<span id="cb39-4"><a href="#cb39-4"></a></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="co"># 2. 레이어 사슬처럼 엮기</span></span>
+<span id="cb39-6"><a href="#cb39-6"></a><span class="co"># 인풋레이어</span></span>
+<span id="cb39-7"><a href="#cb39-7"></a>il <span class="op">=</span> Input(shape<span class="op">=</span>(<span class="dv">32</span>,<span class="dv">32</span>,<span class="dv">3</span>))</span>
+<span id="cb39-8"><a href="#cb39-8"></a><span class="co"># Convolution : 필터수 32개, 사이즈(3, 3), same padding</span></span>
+<span id="cb39-9"><a href="#cb39-9"></a>hl <span class="op">=</span> Conv2D(filters<span class="op">=</span><span class="dv">32</span>,         <span class="co"># 새롭게 제작하려는 feature map의 수! 혹은 서로 다른 필터 32개 사용!</span></span>
+<span id="cb39-10"><a href="#cb39-10"></a>            kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),  <span class="co"># Conv2D 필터의 가로세로 사이즈!</span></span>
+<span id="cb39-11"><a href="#cb39-11"></a>            strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),      <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb39-12"><a href="#cb39-12"></a>            padding<span class="op">=</span><span class="st">'same'</span>,     <span class="co"># 1.이전 feature map 사이즈 보존! 2. 외곽 정보 더 반영!</span></span>
+<span id="cb39-13"><a href="#cb39-13"></a>            activation<span class="op">=</span><span class="st">'relu'</span></span>
+<span id="cb39-14"><a href="#cb39-14"></a>            )(il)               <span class="co"># 주의!!!</span></span>
+<span id="cb39-15"><a href="#cb39-15"></a><span class="co"># Convolution : 필터수 32개, 사이즈(3, 3), same padding</span></span>
+<span id="cb39-16"><a href="#cb39-16"></a>hl <span class="op">=</span> Conv2D(filters<span class="op">=</span><span class="dv">32</span>,         <span class="co"># 새롭게 제작하려는 feature map의 수! 혹은 서로 다른 필터 32개 사용!</span></span>
+<span id="cb39-17"><a href="#cb39-17"></a>            kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),  <span class="co"># Conv2D 필터의 가로세로 사이즈!</span></span>
+<span id="cb39-18"><a href="#cb39-18"></a>            strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),      <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb39-19"><a href="#cb39-19"></a>            padding<span class="op">=</span><span class="st">'same'</span>,     <span class="co"># 1.이전 feature map 사이즈 보존! 2. 외곽 정보 더 반영!</span></span>
+<span id="cb39-20"><a href="#cb39-20"></a>            activation<span class="op">=</span><span class="st">'relu'</span></span>
+<span id="cb39-21"><a href="#cb39-21"></a>            )(hl)               <span class="co"># 주의!!!</span></span>
+<span id="cb39-22"><a href="#cb39-22"></a><span class="co"># BatchNormalization</span></span>
+<span id="cb39-23"><a href="#cb39-23"></a>hl <span class="op">=</span> BatchNormalization()(hl)</span>
+<span id="cb39-24"><a href="#cb39-24"></a><span class="co"># MaxPooling : 사이즈(2,2) 스트라이드(2,2)</span></span>
+<span id="cb39-25"><a href="#cb39-25"></a>hl <span class="op">=</span> MaxPool2D(pool_size<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="co"># Maxpool2D 필터의 가로세로 사이즈!</span></span>
+<span id="cb39-26"><a href="#cb39-26"></a>               strides<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>)    <span class="co"># Maxpool2D 필터의 이동 보폭! 기본적으로 필터 사이즈를 따름!</span></span>
+<span id="cb39-27"><a href="#cb39-27"></a>               )(hl)</span>
+<span id="cb39-28"><a href="#cb39-28"></a><span class="co"># DropOut : 25% 비활성화</span></span>
+<span id="cb39-29"><a href="#cb39-29"></a>hl <span class="op">=</span> Dropout(<span class="fl">0.25</span>)(hl)</span>
+<span id="cb39-30"><a href="#cb39-30"></a></span>
+<span id="cb39-31"><a href="#cb39-31"></a><span class="co"># Convolution : 필터수 64개, 사이즈(3, 3), same padding</span></span>
+<span id="cb39-32"><a href="#cb39-32"></a>hl <span class="op">=</span> Conv2D(filters<span class="op">=</span><span class="dv">64</span>,         <span class="co"># 새롭게 제작하려는 feature map의 수! 혹은 서로 다른 필터 32개 사용!</span></span>
+<span id="cb39-33"><a href="#cb39-33"></a>            kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),  <span class="co"># Conv2D 필터의 가로세로 사이즈!</span></span>
+<span id="cb39-34"><a href="#cb39-34"></a>            strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),      <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb39-35"><a href="#cb39-35"></a>            padding<span class="op">=</span><span class="st">'same'</span>,     <span class="co"># 1.이전 feature map 사이즈 보존! 2. 외곽 정보 더 반영!</span></span>
+<span id="cb39-36"><a href="#cb39-36"></a>            activation<span class="op">=</span><span class="st">'relu'</span></span>
+<span id="cb39-37"><a href="#cb39-37"></a>            )(hl)               <span class="co"># 주의!!!</span></span>
+<span id="cb39-38"><a href="#cb39-38"></a><span class="co"># Convolution : 필터수 64개, 사이즈(3, 3), same padding</span></span>
+<span id="cb39-39"><a href="#cb39-39"></a>hl <span class="op">=</span> Conv2D(filters<span class="op">=</span><span class="dv">64</span>,         <span class="co"># 새롭게 제작하려는 feature map의 수! 혹은 서로 다른 필터 32개 사용!</span></span>
+<span id="cb39-40"><a href="#cb39-40"></a>            kernel_size<span class="op">=</span>(<span class="dv">3</span>,<span class="dv">3</span>),  <span class="co"># Conv2D 필터의 가로세로 사이즈!</span></span>
+<span id="cb39-41"><a href="#cb39-41"></a>            strides<span class="op">=</span>(<span class="dv">1</span>,<span class="dv">1</span>),      <span class="co"># Conv2D 필터의 이동 보폭!</span></span>
+<span id="cb39-42"><a href="#cb39-42"></a>            padding<span class="op">=</span><span class="st">'same'</span>,     <span class="co"># 1.이전 feature map 사이즈 보존! 2. 외곽 정보 더 반영!</span></span>
+<span id="cb39-43"><a href="#cb39-43"></a>            activation<span class="op">=</span><span class="st">'relu'</span></span>
+<span id="cb39-44"><a href="#cb39-44"></a>            )(hl)               <span class="co"># 주의!!!</span></span>
+<span id="cb39-45"><a href="#cb39-45"></a><span class="co"># BatchNormalization</span></span>
+<span id="cb39-46"><a href="#cb39-46"></a>hl <span class="op">=</span> BatchNormalization()(hl)</span>
+<span id="cb39-47"><a href="#cb39-47"></a><span class="co"># MaxPooling : 사이즈(2,2) 스트라이드(2,2)</span></span>
+<span id="cb39-48"><a href="#cb39-48"></a>hl <span class="op">=</span> MaxPool2D(pool_size<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>), <span class="co"># Maxpool2D 필터의 가로세로 사이즈!</span></span>
+<span id="cb39-49"><a href="#cb39-49"></a>               strides<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">2</span>)    <span class="co"># Maxpool2D 필터의 이동 보폭! 기본적으로 필터 사이즈를 따름!</span></span>
+<span id="cb39-50"><a href="#cb39-50"></a>               )(hl)</span>
+<span id="cb39-51"><a href="#cb39-51"></a><span class="co"># DropOut : 25% 비활성화</span></span>
+<span id="cb39-52"><a href="#cb39-52"></a>hl <span class="op">=</span> Dropout(<span class="fl">0.25</span>)(hl)</span>
+<span id="cb39-53"><a href="#cb39-53"></a></span>
+<span id="cb39-54"><a href="#cb39-54"></a><span class="co"># Flatten( )</span></span>
+<span id="cb39-55"><a href="#cb39-55"></a>hl <span class="op">=</span> Flatten()(hl)</span>
+<span id="cb39-56"><a href="#cb39-56"></a><span class="co"># Fully Connected Layer : 노드 1024개</span></span>
+<span id="cb39-57"><a href="#cb39-57"></a>hl <span class="op">=</span> Dense(<span class="dv">1024</span>, activation<span class="op">=</span><span class="st">'relu'</span>)(hl)</span>
+<span id="cb39-58"><a href="#cb39-58"></a><span class="co"># BatchNormalization</span></span>
+<span id="cb39-59"><a href="#cb39-59"></a>hl <span class="op">=</span> BatchNormalization()(hl)</span>
+<span id="cb39-60"><a href="#cb39-60"></a><span class="co"># DropOut : 35% 비활성화</span></span>
+<span id="cb39-61"><a href="#cb39-61"></a>hl <span class="op">=</span> Dropout(<span class="fl">0.35</span>)(hl)</span>
+<span id="cb39-62"><a href="#cb39-62"></a><span class="co"># 아웃풋레이어</span></span>
+<span id="cb39-63"><a href="#cb39-63"></a>ol <span class="op">=</span> Dense(<span class="dv">10</span>, activation<span class="op">=</span><span class="st">'softmax'</span>)(hl)</span>
+<span id="cb39-64"><a href="#cb39-64"></a></span>
+<span id="cb39-65"><a href="#cb39-65"></a><span class="co"># 3. 모델의 시작과 끝 지정</span></span>
+<span id="cb39-66"><a href="#cb39-66"></a>model2 <span class="op">=</span> Model(il, ol)</span>
+<span id="cb39-67"><a href="#cb39-67"></a></span>
+<span id="cb39-68"><a href="#cb39-68"></a><span class="co"># 4. 컴파일</span></span>
+<span id="cb39-69"><a href="#cb39-69"></a>model2.<span class="bu">compile</span>(optimizer<span class="op">=</span><span class="st">'adam'</span>,</span>
+<span id="cb39-70"><a href="#cb39-70"></a>               loss<span class="op">=</span>categorical_crossentropy,</span>
+<span id="cb39-71"><a href="#cb39-71"></a>               metrics<span class="op">=</span>[<span class="st">'accuracy'</span>]</span>
+<span id="cb39-72"><a href="#cb39-72"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="35e91b68-59e9-412f-9dba-4f17f52a2d2a">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>model2.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Model: "model"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 32, 32, 3)]       0         
+                                                                 
+ conv2d (Conv2D)             (None, 32, 32, 32)        896       
+                                                                 
+ conv2d_1 (Conv2D)           (None, 32, 32, 32)        9248      
+                                                                 
+ batch_normalization (Batch  (None, 32, 32, 32)        128       
+ Normalization)                                                  
+                                                                 
+ max_pooling2d (MaxPooling2  (None, 16, 16, 32)        0         
+ D)                                                              
+                                                                 
+ dropout (Dropout)           (None, 16, 16, 32)        0         
+                                                                 
+ conv2d_2 (Conv2D)           (None, 16, 16, 64)        18496     
+                                                                 
+ conv2d_3 (Conv2D)           (None, 16, 16, 64)        36928     
+                                                                 
+ batch_normalization_1 (Bat  (None, 16, 16, 64)        256       
+ chNormalization)                                                
+                                                                 
+ max_pooling2d_1 (MaxPoolin  (None, 8, 8, 64)          0         
+ g2D)                                                            
+                                                                 
+ dropout_1 (Dropout)         (None, 8, 8, 64)          0         
+                                                                 
+ flatten (Flatten)           (None, 4096)              0         
+                                                                 
+ dense (Dense)               (None, 1024)              4195328   
+                                                                 
+ batch_normalization_2 (Bat  (None, 1024)              4096      
+ chNormalization)                                                
+                                                                 
+ dropout_2 (Dropout)         (None, 1024)              0         
+                                                                 
+ dense_1 (Dense)             (None, 10)                10250     
+                                                                 
+=================================================================
+Total params: 4275626 (16.31 MB)
+Trainable params: 4273386 (16.30 MB)
+Non-trainable params: 2240 (8.75 KB)
+_________________________________________________________________</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="im">from</span> tensorflow.keras.callbacks <span class="im">import</span> EarlyStopping</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a>es <span class="op">=</span> EarlyStopping(monitor<span class="op">=</span><span class="st">'val_loss'</span>,     <span class="co"># 얼리스토핑을 적용할 대상!</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a>                   min_delta<span class="op">=</span><span class="dv">0</span>,            <span class="co"># Threshold. 이보다 크게 변화해야 성능 개선 간주!</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a>                   patience<span class="op">=</span><span class="dv">3</span>,             <span class="co"># 성능 개선이 발생하지 않을 때, 몇 epochs 더 볼 것인지!</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a>                   verbose<span class="op">=</span><span class="dv">1</span>,              <span class="co"># 어느 epoch가 최적인지 알려줌!</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a>                   restore_best_weights<span class="op">=</span><span class="va">True</span> <span class="co"># 얼리스토핑으로 학습이 멈췄을 때, 최적의 가중치를 가진 시점으로 돌려줌!</span></span>
+<span id="cb43-6"><a href="#cb43-6"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="1572bf2e-d730-4f8d-e2a7-21f6f286bb48">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a>model2.fit(train_x, train_y, epochs<span class="op">=</span><span class="dv">10000</span>, verbose<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb44-2"><a href="#cb44-2"></a>           validation_split<span class="op">=</span><span class="fl">0.2</span>,   <span class="co"># 매 epoch마다 training set에서 20%를 validation으로 지정!</span></span>
+<span id="cb44-3"><a href="#cb44-3"></a>           callbacks<span class="op">=</span>[es]          <span class="co"># 얼리스토핑 적용!</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a>           )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 1/10000
+1250/1250 [==============================] - 23s 8ms/step - loss: 1.5644 - accuracy: 0.4883 - val_loss: 1.1193 - val_accuracy: 0.6283
+Epoch 2/10000
+1250/1250 [==============================] - 9s 7ms/step - loss: 1.0641 - accuracy: 0.6286 - val_loss: 0.8881 - val_accuracy: 0.6901
+Epoch 3/10000
+1250/1250 [==============================] - 9s 7ms/step - loss: 0.9226 - accuracy: 0.6790 - val_loss: 0.9034 - val_accuracy: 0.6921
+Epoch 4/10000
+1250/1250 [==============================] - 10s 8ms/step - loss: 0.8170 - accuracy: 0.7150 - val_loss: 0.8299 - val_accuracy: 0.7211
+Epoch 5/10000
+1250/1250 [==============================] - 10s 8ms/step - loss: 0.7404 - accuracy: 0.7428 - val_loss: 0.7956 - val_accuracy: 0.7306
+Epoch 6/10000
+1250/1250 [==============================] - 9s 7ms/step - loss: 0.6906 - accuracy: 0.7589 - val_loss: 0.7729 - val_accuracy: 0.7436
+Epoch 7/10000
+1250/1250 [==============================] - 10s 8ms/step - loss: 0.6233 - accuracy: 0.7829 - val_loss: 0.6676 - val_accuracy: 0.7739
+Epoch 8/10000
+1250/1250 [==============================] - 9s 8ms/step - loss: 0.5692 - accuracy: 0.8009 - val_loss: 0.6594 - val_accuracy: 0.7831
+Epoch 9/10000
+1250/1250 [==============================] - 9s 7ms/step - loss: 0.5153 - accuracy: 0.8210 - val_loss: 0.6843 - val_accuracy: 0.7760
+Epoch 10/10000
+1250/1250 [==============================] - 9s 7ms/step - loss: 0.4761 - accuracy: 0.8338 - val_loss: 0.6373 - val_accuracy: 0.7886
+Epoch 11/10000
+1250/1250 [==============================] - 10s 8ms/step - loss: 0.4448 - accuracy: 0.8424 - val_loss: 0.8425 - val_accuracy: 0.7519
+Epoch 12/10000
+1250/1250 [==============================] - 9s 7ms/step - loss: 0.3841 - accuracy: 0.8635 - val_loss: 0.6361 - val_accuracy: 0.7977
+Epoch 13/10000
+1250/1250 [==============================] - 10s 8ms/step - loss: 0.3479 - accuracy: 0.8777 - val_loss: 0.7693 - val_accuracy: 0.7677
+Epoch 14/10000
+1250/1250 [==============================] - 9s 8ms/step - loss: 0.3538 - accuracy: 0.8752 - val_loss: 0.6934 - val_accuracy: 0.7936
+Epoch 15/10000
+1248/1250 [============================&gt;.] - ETA: 0s - loss: 0.3086 - accuracy: 0.8913Restoring model weights from the end of the best epoch: 12.
+1250/1250 [==============================] - 10s 8ms/step - loss: 0.3088 - accuracy: 0.8912 - val_loss: 0.6732 - val_accuracy: 0.7962
+Epoch 15: early stopping</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>&lt;keras.src.callbacks.History at 0x797b3cb59630&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="visualization" class="level3">
+<h3 class="anchored" data-anchor-id="visualization">Visualization</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1"></a><span class="co"># 원핫 인코딩 해제 : 카테고리 중 가장 높은 값</span></span>
+<span id="cb47-2"><a href="#cb47-2"></a>train_y <span class="op">=</span> train_y.argmax(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb47-3"><a href="#cb47-3"></a>test_y <span class="op">=</span> test_y.argmax(axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-outputid="9365ee6d-ac8b-4ed8-db5c-ee6cd2dba2be">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a>pred_train <span class="op">=</span> model2.predict(train_x)</span>
+<span id="cb48-2"><a href="#cb48-2"></a>pred_test <span class="op">=</span> model2.predict(test_x)</span>
+<span id="cb48-3"><a href="#cb48-3"></a></span>
+<span id="cb48-4"><a href="#cb48-4"></a>single_pred_train <span class="op">=</span> pred_train.argmax(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb48-5"><a href="#cb48-5"></a>single_pred_test <span class="op">=</span> pred_test.argmax(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb48-6"><a href="#cb48-6"></a></span>
+<span id="cb48-7"><a href="#cb48-7"></a>logi_train_accuracy <span class="op">=</span> accuracy_score(train_y, single_pred_train)</span>
+<span id="cb48-8"><a href="#cb48-8"></a>logi_test_accuracy <span class="op">=</span> accuracy_score(test_y, single_pred_test)</span>
+<span id="cb48-9"><a href="#cb48-9"></a></span>
+<span id="cb48-10"><a href="#cb48-10"></a><span class="bu">print</span>(<span class="st">'CNN'</span>)</span>
+<span id="cb48-11"><a href="#cb48-11"></a><span class="bu">print</span>(<span class="ss">f'트레이닝 정확도 : </span><span class="sc">{</span>logi_train_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%'</span>)</span>
+<span id="cb48-12"><a href="#cb48-12"></a><span class="bu">print</span>(<span class="ss">f'테스트 정확도 : </span><span class="sc">{</span>logi_test_accuracy<span class="op">*</span><span class="dv">100</span><span class="sc">:.2f}</span><span class="ss">%'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1563/1563 [==============================] - 3s 2ms/step
+313/313 [==============================] - 1s 3ms/step
+CNN
+트레이닝 정확도 : 92.97%
+테스트 정확도 : 79.27%</code></pre>
+</div>
+</div>
+<div class="cell" data-outputid="551e5531-83f4-4ed9-8470-515fe0d6b5da">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a><span class="bu">id</span> <span class="op">=</span> rd.randrange(<span class="dv">0</span>,<span class="dv">10000</span>)</span>
+<span id="cb50-2"><a href="#cb50-2"></a></span>
+<span id="cb50-3"><a href="#cb50-3"></a><span class="bu">print</span>(<span class="ss">f'id = </span><span class="sc">{</span><span class="bu">id</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb50-4"><a href="#cb50-4"></a><span class="bu">print</span>(<span class="ss">f'다음 그림은 </span><span class="sc">{</span>labels[test_y[<span class="bu">id</span>]]<span class="sc">}</span><span class="ss"> 입니다.'</span>)</span>
+<span id="cb50-5"><a href="#cb50-5"></a><span class="bu">print</span>(<span class="ss">f'모델의 예측 : </span><span class="sc">{</span>labels[single_pred_test[<span class="bu">id</span>]]<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb50-6"><a href="#cb50-6"></a></span>
+<span id="cb50-7"><a href="#cb50-7"></a>prob <span class="op">=</span> np.floor(pred_test[<span class="bu">id</span>]<span class="op">*</span><span class="dv">100</span>).tolist()</span>
+<span id="cb50-8"><a href="#cb50-8"></a>prob_dict <span class="op">=</span> {}</span>
+<span id="cb50-9"><a href="#cb50-9"></a></span>
+<span id="cb50-10"><a href="#cb50-10"></a><span class="cf">for</span> idx, prob <span class="kw">in</span> <span class="bu">enumerate</span>(prob) :</span>
+<span id="cb50-11"><a href="#cb50-11"></a>    prob_dict[ labels[idx] ] <span class="op">=</span> prob</span>
+<span id="cb50-12"><a href="#cb50-12"></a></span>
+<span id="cb50-13"><a href="#cb50-13"></a><span class="bu">print</span>(<span class="st">'모델의 카테고리별 확률 : '</span>)</span>
+<span id="cb50-14"><a href="#cb50-14"></a><span class="bu">print</span>(prob_dict)</span>
+<span id="cb50-15"><a href="#cb50-15"></a></span>
+<span id="cb50-16"><a href="#cb50-16"></a><span class="cf">if</span> test_y[<span class="bu">id</span>] <span class="op">==</span> single_pred_test[<span class="bu">id</span>] :</span>
+<span id="cb50-17"><a href="#cb50-17"></a>    <span class="bu">print</span>(<span class="st">'정답입니다'</span>)</span>
+<span id="cb50-18"><a href="#cb50-18"></a><span class="cf">else</span> :</span>
+<span id="cb50-19"><a href="#cb50-19"></a>    <span class="bu">print</span>(<span class="st">'틀렸어요'</span>)</span>
+<span id="cb50-20"><a href="#cb50-20"></a></span>
+<span id="cb50-21"><a href="#cb50-21"></a>plt.imshow(test_x[<span class="bu">id</span>].reshape([<span class="dv">32</span>,<span class="dv">32</span>,<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb50-22"><a href="#cb50-22"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>id = 9649
+다음 그림은 Dog 입니다.
+모델의 예측 : Dog
+모델의 카테고리별 확률 : 
+{'Airplane': 0.0, 'Automobile': 0.0, 'Bird': 0.0, 'Cat': 24.0, 'Deer': 0.0, 'Dog': 74.0, 'Frog': 0.0, 'Horse': 0.0, 'Ship': 0.0, 'Truck': 0.0}
+정답입니다</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-01-29-01. CNNwithCIFAR10_files/figure-html/cell-35-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-outputid="42557933-73d3-4d17-9689-1106e0a13c69">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a><span class="co">'''</span></span>
+<span id="cb53-2"><a href="#cb53-2"></a><span class="co">틀린 것만 관찰해보기</span></span>
+<span id="cb53-3"><a href="#cb53-3"></a></span>
+<span id="cb53-4"><a href="#cb53-4"></a><span class="co">'''</span></span>
+<span id="cb53-5"><a href="#cb53-5"></a></span>
+<span id="cb53-6"><a href="#cb53-6"></a>true_false <span class="op">=</span> (test_y <span class="op">==</span> single_pred_test)</span>
+<span id="cb53-7"><a href="#cb53-7"></a>f_id <span class="op">=</span> np.where(true_false <span class="op">==</span> <span class="va">False</span>)[<span class="dv">0</span>]</span>
+<span id="cb53-8"><a href="#cb53-8"></a>f_n <span class="op">=</span> <span class="bu">len</span>(f_id)</span>
+<span id="cb53-9"><a href="#cb53-9"></a></span>
+<span id="cb53-10"><a href="#cb53-10"></a><span class="bu">id</span> <span class="op">=</span> f_id[rd.randrange(<span class="dv">0</span>,f_n)]</span>
+<span id="cb53-11"><a href="#cb53-11"></a></span>
+<span id="cb53-12"><a href="#cb53-12"></a></span>
+<span id="cb53-13"><a href="#cb53-13"></a><span class="bu">print</span>(<span class="ss">f'id = </span><span class="sc">{</span><span class="bu">id</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb53-14"><a href="#cb53-14"></a><span class="bu">print</span>(<span class="ss">f'다음 그림은 </span><span class="sc">{</span>labels[test_y[<span class="bu">id</span>]]<span class="sc">}</span><span class="ss"> 입니다.'</span>)</span>
+<span id="cb53-15"><a href="#cb53-15"></a><span class="bu">print</span>(<span class="ss">f'모델의 예측 : </span><span class="sc">{</span>labels[single_pred_test[<span class="bu">id</span>]]<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb53-16"><a href="#cb53-16"></a></span>
+<span id="cb53-17"><a href="#cb53-17"></a>prob <span class="op">=</span> np.floor(pred_test[<span class="bu">id</span>]<span class="op">*</span><span class="dv">100</span>).tolist()</span>
+<span id="cb53-18"><a href="#cb53-18"></a>prob_dict <span class="op">=</span> {}</span>
+<span id="cb53-19"><a href="#cb53-19"></a></span>
+<span id="cb53-20"><a href="#cb53-20"></a><span class="cf">for</span> idx, prob <span class="kw">in</span> <span class="bu">enumerate</span>(prob) :</span>
+<span id="cb53-21"><a href="#cb53-21"></a>    prob_dict[ labels[idx] ] <span class="op">=</span> prob</span>
+<span id="cb53-22"><a href="#cb53-22"></a></span>
+<span id="cb53-23"><a href="#cb53-23"></a><span class="bu">print</span>(<span class="st">'모델의 카테고리별 확률 : '</span>)</span>
+<span id="cb53-24"><a href="#cb53-24"></a><span class="bu">print</span>(prob_dict)</span>
+<span id="cb53-25"><a href="#cb53-25"></a></span>
+<span id="cb53-26"><a href="#cb53-26"></a><span class="cf">if</span> test_y[<span class="bu">id</span>] <span class="op">==</span> single_pred_test[<span class="bu">id</span>] :</span>
+<span id="cb53-27"><a href="#cb53-27"></a>    <span class="bu">print</span>(<span class="st">'정답입니다'</span>)</span>
+<span id="cb53-28"><a href="#cb53-28"></a><span class="cf">else</span> :</span>
+<span id="cb53-29"><a href="#cb53-29"></a>    <span class="bu">print</span>(<span class="st">'틀렸어요'</span>)</span>
+<span id="cb53-30"><a href="#cb53-30"></a></span>
+<span id="cb53-31"><a href="#cb53-31"></a>plt.imshow(test_x[<span class="bu">id</span>].reshape([<span class="dv">32</span>,<span class="dv">32</span>,<span class="op">-</span><span class="dv">1</span>]))</span>
+<span id="cb53-32"><a href="#cb53-32"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>WARNING:matplotlib.image:Clipping input data to the valid range for imshow with RGB data ([0..1] for floats or [0..255] for integers).</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>id = 685
+다음 그림은 Frog 입니다.
+모델의 예측 : Bird
+모델의 카테고리별 확률 : 
+{'Airplane': 0.0, 'Automobile': 0.0, 'Bird': 75.0, 'Cat': 7.0, 'Deer': 15.0, 'Dog': 0.0, 'Frog': 0.0, 'Horse': 0.0, 'Ship': 0.0, 'Truck': 0.0}
+틀렸어요</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="2021-01-29-01. CNNwithCIFAR10_files/figure-html/cell-36-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../posts/basic/2023-11-01-03. Titanic.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">03. Titanic</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../posts/image/2021-01-30-02. CNNwithMNIST.html" class="pagination-link">
+        <span class="nav-page-text">01. MNIST</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
