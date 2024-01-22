@@ -1,0 +1,32 @@
+{
+  "about.qmd": {
+    "about.html": "919be36e"
+  },
+  "index.qmd": {
+    "index.html": "8a99d88b"
+  },
+  "posts/advanced/2024-01-08-04. MNIST.ipynb": {
+    "2024-01-08-04. MNIST.html": "f51ef706"
+  },
+  "posts/advanced/2024-01-21-00. Associate review.ipynb": {
+    "2024-01-21-00. Associate review.html": "66115df9"
+  },
+  "posts/advanced/2024-01-22-01. 텍스트 분류.ipynb": {
+    "2024-01-22-01. 텍스트 분류.html": "43202457"
+  },
+  "posts/advanced/2024-01-22-02.이미지_분류.ipynb": {
+    "2024-01-22-02.이미지_분류.html": "d6d72a32"
+  },
+  "posts/basic/2023-10-30-00. Churn.ipynb": {
+    "2023-10-30-00. Churn.html": "3a38d847"
+  },
+  "posts/basic/2023-10-31-01. VOC.ipynb": {
+    "2023-10-31-01. VOC.html": "b112daaf"
+  },
+  "posts/basic/2023-11-01-02. iris.ipynb": {
+    "2023-11-01-02. iris.html": "b5613807"
+  },
+  "posts/basic/2023-11-01-03. Titanic.ipynb": {
+    "2023-11-01-03. Titanic.html": "7faa8c21"
+  }
+}
