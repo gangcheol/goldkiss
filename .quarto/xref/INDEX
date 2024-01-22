@@ -52,5 +52,23 @@
   },
   "posts/image/2021-02-08-08. PretrainedModel_and_Tuning.ipynb": {
     "2021-02-08-08. PretrainedModel_and_Tuning.html": "aef1e434"
+  },
+  "posts/advanced/2023-01-21-00. Intro.ipynb": {
+    "2023-01-21-00. Intro.html": "56710ac6"
+  },
+  "posts/advanced/2023-01-22-01. 텍스트 분류.ipynb": {
+    "2023-01-22-01. 텍스트 분류.html": "e53aa7b7"
+  },
+  "posts/advanced/2023-01-22-02.이미지_분류.ipynb": {
+    "2023-01-22-02.이미지_분류.html": "3bf7af2f"
+  },
+  "posts/advanced/2024-01-22-03.titanic.ipynb": {
+    "2024-01-22-03.titanic.html": "a70c5396"
+  },
+  "posts/image/2021-02-09-09. CNNwithTextDataset.ipynb": {
+    "2021-02-09-09. CNNwithTextDataset.html": "e8279796"
+  },
+  "posts/advanced/2023-01-22-03.titanic.ipynb": {
+    "2023-01-22-03.titanic.html": "46ba2743"
   }
 }

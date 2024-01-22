@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="GC">
-<meta name="dcterms.date" content="2024-01-22">
+<meta name="dcterms.date" content="2023-01-22">
 
 <title>Goldkiss - 01. 텍스트 분류</title>
 <style>
@@ -66,8 +66,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../posts/advanced/2024-01-22-02.이미지_분류.html" rel="next">
-<link href="../../posts/advanced/2024-01-21-00. Associate review.html" rel="prev">
+<link href="../../posts/advanced/2023-01-22-02.이미지_분류.html" rel="next">
+<link href="../../posts/advanced/2023-01-21-00. Intro.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -111,7 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Posts</li><li class="breadcrumb-item"><a href="../../posts/advanced/2024-01-08-04. MNIST.html">Advanced</a></li><li class="breadcrumb-item"><a href="../../posts/advanced/2024-01-22-01. 텍스트 분류.html">01. 텍스트 분류</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Posts</li><li class="breadcrumb-item"><a href="../../posts/advanced/2023-01-21-00. Intro.html">Advanced</a></li><li class="breadcrumb-item"><a href="../../posts/advanced/2023-01-22-01. 텍스트 분류.html">01. 텍스트 분류</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -144,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">January 22, 2024</p>
+        <p class="date">January 22, 2023</p>
       </div>
     </div>
     
@@ -193,26 +193,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../posts/advanced/2024-01-08-04. MNIST.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">04. MNIST</span></a>
+  <a href="../../posts/advanced/2023-01-21-00. Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">00. Intro</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../posts/advanced/2024-01-21-00. Associate review.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">00. Associate Review</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/advanced/2024-01-22-01. 텍스트 분류.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../posts/advanced/2023-01-22-01. 텍스트 분류.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">01. 텍스트 분류</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../posts/advanced/2024-01-22-02.이미지_분류.html" class="sidebar-item-text sidebar-link">
+  <a href="../../posts/advanced/2023-01-22-02.이미지_분류.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">02. 이미지 분류</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2023-01-22-03.titanic.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">03. titanic</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/advanced/2024-01-08-04. MNIST.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">04. MNIST</span></a>
   </div>
 </li>
       </ul>
@@ -307,6 +313,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../../posts/image/2021-02-08-08. PretrainedModel_and_Tuning.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">07. pretrained Model (2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../posts/image/2021-02-09-09. CNNwithTextDataset.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">08. CNN with Text</span></a>
   </div>
 </li>
       </ul>
@@ -417,7 +429,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-14"><a href="#cb6-14"></a><span class="bu">print</span>(<span class="ss">f"리뷰의 최대 길이  : </span><span class="sc">{</span><span class="bu">max</span>(review_length)<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb6-15"><a href="#cb6-15"></a><span class="bu">print</span>(<span class="ss">f"리뷰의 평균 길이  : </span><span class="sc">{</span>np<span class="sc">.</span>mean(review_length)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2024-01-22-01. 텍스트 분류_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+<p><img src="2023-01-22-01. 텍스트 분류_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>리뷰의 최대 길이  : 2494
@@ -602,7 +614,7 @@ _________________________________________________________________</code></pre>
 <span id="cb30-4"><a href="#cb30-4"></a>plt.legend()</span>
 <span id="cb30-5"><a href="#cb30-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2024-01-22-01. 텍스트 분류_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+<p><img src="2023-01-22-01. 텍스트 분류_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -699,7 +711,7 @@ Epoch 6: early stopping</code></pre>
 <span id="cb42-4"><a href="#cb42-4"></a>plt.legend()</span>
 <span id="cb42-5"><a href="#cb42-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2024-01-22-01. 텍스트 분류_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
+<p><img src="2023-01-22-01. 텍스트 분류_files/figure-html/cell-28-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <div class="cell" data-executioninfo="{&quot;elapsed&quot;:3182,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1705839765983,&quot;user&quot;:{&quot;displayName&quot;:&quot;ccc flkwerkdai&quot;,&quot;userId&quot;:&quot;13507850890638580947&quot;},&quot;user_tz&quot;:-540}" data-outputid="ef49155d-7129-4629-b6e2-549fdcc08b96" data-execution_count="75">
@@ -816,7 +828,7 @@ _________________________________________________________________</code></pre>
 <span id="cb54-4"><a href="#cb54-4"></a>plt.legend()</span>
 <span id="cb54-5"><a href="#cb54-5"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="2024-01-22-01. 텍스트 분류_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
+<p><img src="2023-01-22-01. 텍스트 분류_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <div class="cell" data-executioninfo="{&quot;elapsed&quot;:2481,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1705840466623,&quot;user&quot;:{&quot;displayName&quot;:&quot;ccc flkwerkdai&quot;,&quot;userId&quot;:&quot;13507850890638580947&quot;},&quot;user_tz&quot;:-540}" data-outputid="1274f65e-5359-4c5d-b3d3-a1b068c33d90" data-execution_count="82">
@@ -1093,12 +1105,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../posts/advanced/2024-01-21-00. Associate review.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">00. Associate Review</span>
+      <a href="../../posts/advanced/2023-01-21-00. Intro.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">00. Intro</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../posts/advanced/2024-01-22-02.이미지_분류.html" class="pagination-link">
+      <a href="../../posts/advanced/2023-01-22-02.이미지_분류.html" class="pagination-link">
         <span class="nav-page-text">02. 이미지 분류</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
