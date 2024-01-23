@@ -350,8 +350,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#intro" id="toc-intro" class="nav-link active" data-scroll-target="#intro">Intro</a></li>
-  <li><a href="#tabulartitanic" id="toc-tabulartitanic" class="nav-link" data-scroll-target="#tabulartitanic">Tabular(Titanic)</a>
+  <li><a href="#titanic" id="toc-titanic" class="nav-link active" data-scroll-target="#titanic">Titanic</a>
   <ul class="collapse">
   <li><a href="#데이터-로드" id="toc-데이터-로드" class="nav-link" data-scroll-target="#데이터-로드">데이터 로드</a></li>
   <li><a href="#데이터-전처리-1.-결측치가-많은-deck-변수-제거" id="toc-데이터-전처리-1.-결측치가-많은-deck-변수-제거" class="nav-link" data-scroll-target="#데이터-전처리-1.-결측치가-많은-deck-변수-제거">데이터 전처리 1. 결측치가 많은 deck 변수 제거</a></li>
@@ -377,19 +376,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="intro" class="level1">
-<h1>Intro</h1>
-<p><code>1</code> Associate와 달리 성능 달성을 목적으로 이루어지는 시험</p>
-<p><code>2</code> 별도의 가이드 라인 없이 응시자가 알아서 수행</p>
-<p><code>3</code> Tabular, Text(한글, 영문), Image(영상 제외) 데이터에 대한 문제가 1개씩 주어지면 3시간 동안 문제를 풀어야함.</p>
-<p><code>4</code> 제출할 파일 목록</p>
-<ul>
-<li><p>본인핸드폰번호_1.h5(또는 다른 확장자의 모델 파일)</p></li>
-<li><p>본인핸드폰번호_1.csv</p></li>
-<li><p>시스템매핑번호_1.ipynb(본 문제지 상단 저장버튼을 눌러 저장)</p></li>
-<li><p>예시 : 01082478779_1.h5</p></li>
-</ul>
-<p><code>5</code> GPU 할당 코드</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> tensorflow <span class="im">as</span> tf</span>
 <span id="cb1-2"><a href="#cb1-2"></a>gpus <span class="op">=</span> tf.config.list_physical_devices(<span class="st">"GPU"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3"></a></span>
@@ -401,12 +387,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9"></a>    <span class="bu">print</span>(<span class="bu">len</span>(gpus), <span class="st">"Physical GPUS"</span>, <span class="bu">len</span>(logical_gpus), <span class="st">"Logical GPUs"</span>)</span>
 <span id="cb1-10"><a href="#cb1-10"></a>  <span class="cf">except</span> RuntimeErroe <span class="im">as</span> e :</span>
 <span id="cb1-11"><a href="#cb1-11"></a>    <span class="bu">print</span>(e)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><code>6</code> 수시로 임시저장 누르기</p>
-<p><code>7</code> 인터넷 검색만 활용해서 문제를 풀어야 한다…(그리고 듀얼모니터 사용 불가)</p>
 <hr>
-</section>
-<section id="tabulartitanic" class="level1">
-<h1>Tabular(Titanic)</h1>
+<section id="titanic" class="level1">
+<h1>Titanic</h1>
 <section id="데이터-로드" class="level2">
 <h2 class="anchored" data-anchor-id="데이터-로드">데이터 로드</h2>
 <div class="cell" data-executioninfo="{&quot;elapsed&quot;:20,&quot;status&quot;:&quot;ok&quot;,&quot;timestamp&quot;:1705938619683,&quot;user&quot;:{&quot;displayName&quot;:&quot;ccc flkwerkdai&quot;,&quot;userId&quot;:&quot;13507850890638580947&quot;},&quot;user_tz&quot;:-540}" data-execution_count="170">

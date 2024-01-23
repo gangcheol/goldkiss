@@ -627,7 +627,7 @@
     "href": "posts/advanced/2023-01-22-03. titanic.html",
     "title": "03. titanic",
     "section": "",
-    "text": "1 Associate와 달리 성능 달성을 목적으로 이루어지는 시험\n2 별도의 가이드 라인 없이 응시자가 알아서 수행\n3 Tabular, Text(한글, 영문), Image(영상 제외) 데이터에 대한 문제가 1개씩 주어지면 3시간 동안 문제를 풀어야함.\n4 제출할 파일 목록\n\n본인핸드폰번호_1.h5(또는 다른 확장자의 모델 파일)\n본인핸드폰번호_1.csv\n시스템매핑번호_1.ipynb(본 문제지 상단 저장버튼을 눌러 저장)\n예시 : 01082478779_1.h5\n\n5 GPU 할당 코드\nimport tensorflow as tf\ngpus = tf.config.list_physical_devices(\"GPU\")\n\nif gpus :\n  try :\n    for gpu in gpus :\n          tf.config.experimental.set_memory_growth(gpu, True)\n    logical_gpus = tf.config.experimental.list_logical_devices(\"GPU\")\n    print(len(gpus), \"Physical GPUS\", len(logical_gpus), \"Logical GPUs\")\n  except RuntimeErroe as e :\n    print(e)\n6 수시로 임시저장 누르기\n7 인터넷 검색만 활용해서 문제를 풀어야 한다…(그리고 듀얼모니터 사용 불가)"
+    "text": "import tensorflow as tf\ngpus = tf.config.list_physical_devices(\"GPU\")\n\nif gpus :\n  try :\n    for gpu in gpus :\n          tf.config.experimental.set_memory_growth(gpu, True)\n    logical_gpus = tf.config.experimental.list_logical_devices(\"GPU\")\n    print(len(gpus), \"Physical GPUS\", len(logical_gpus), \"Logical GPUs\")\n  except RuntimeErroe as e :\n    print(e)"
   },
   {
     "objectID": "posts/advanced/2023-01-22-03. titanic.html#데이터-로드",
